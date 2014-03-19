@@ -1,0 +1,58 @@
+﻿@model Fridge.Models.Food
+@{
+    ViewBag.Title = "JQuery";
+}
+
+<div class="row">
+    <div class="col-lg-6 col-md-6">
+        <h2>What's in the fridge? (jQuery)</h2>
+        <table class="table table-striped" id="foods-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Kind</th>
+                    <th>Brand</th>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Units</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="col-lg-6 col-md-6">
+        <form role="form">
+            <h2 id="EditMode">Create</h2>
+            <input type="hidden" id="Id" />
+            <div class="form-group">
+                @Html.LabelFor(food => food.Kind)
+                @Html.EditorFor(food => food.Kind, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(food => food.Brand)
+                @Html.EditorFor(food => food.Brand, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(food => food.Name)
+                @Html.EditorFor(food => food.Name, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(food => food.PortionSize)
+                @Html.EditorFor(food => food.PortionSize, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(food => food.PortionUnits)
+                @Html.EditorFor(food => food.PortionUnits, new { @class = "form-control" })
+            </div>
+
+            <button type="submit" class="btn btn-default" id="submitFood">Submit</button>
+        </form>
+    </div>
+</div>
+@section scripts {
+    <script type="text/javascript" src="/app/jqfridge.js"></script>
+}

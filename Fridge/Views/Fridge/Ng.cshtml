@@ -1,0 +1,73 @@
+﻿@using Fridge.Helpers
+@using Fridge.Models;
+@model IFridgeScope
+@{ ViewBag.Title = "AngularJS"; }
+
+@* TODO: Magic. Best would be T4 scan of app folder that dumps a static constants class providing app, controller names. *@
+<div ng-app="FridgeApp" ng-controller="Fridge.Controllers.FridgeCtrl" class="row">
+    <div class="col-lg-6 col-md-6">
+        <h2>What's in the fridge? (AngularJS)</h2>
+        <table class="table table-striped">
+            <thead>
+                @{ var th = new HtmlHelper<Food>(Html.ViewContext, Html.ViewDataContainer); }
+                <tr>
+                    <th></th>
+                    <th>@th.DisplayNameFor(f => f.Kind)</th>
+                    <th>@th.DisplayNameFor(f => f.Brand)</th>
+                    <th>@th.DisplayNameFor(f => f.Name)</th>
+                    <th>@th.DisplayNameFor(f => f.PortionSize)</th>
+                    <th>@th.DisplayNameFor(f => f.PortionUnits)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @using (var tr = Html.NgRepeat("tr", scope => scope.Foods, new { ng_class = "{info:Food.Selected}" }))
+                {
+                    @* TODO: bool property on NgClick for passing current scope name as param *@
+                    <td>
+                        <a ng-click="SelectEditFood(Food)" @tr.Html.NgShow(f => f.Id) class="btn btn-primary btn-xs">Edit</a>
+                        <a ng-click="DeleteFood(Food)" @tr.Html.NgShow(f => f.Id) class="btn btn-danger btn-xs">Delete</a>
+                    </td>
+                    <td @tr.Html.NgBind(f => f.Kind)></td>
+
+                    <td>@tr.Html.NgExpr(f => f.Brand)</td>
+                    <td>@tr.Html.NgExpr(f => f.Name)</td>
+                    <td>@tr.Html.NgExpr(f => f.PortionSize)</td>
+
+                    <td>{{Food.PortionUnits}}</td>
+                }
+                <tr><td colspan="6"><a class="btn btn-success btn-xs" @Html.NgClick(scope => scope.CreateFood())>Create</a></td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-6 col-md-6">
+        <h2>@Html.NgExpr(scope => scope.EditMode)</h2>
+        @using (var form = Html.NgForm(scope => scope.EditFood))
+        {
+            <div class="form-group" ng-class="{ 'has-error': EditFoodForm['EditFood.Kind'].$invalid }">
+                @form.Html.NgLabelFor(f => f.Kind)
+                @form.Html.NgInputFor(f => f.Kind, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @form.Html.NgLabelFor(f => f.Brand)
+                @form.Html.NgInputFor(f => f.Brand, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @form.Html.NgLabelFor(f => f.Name)
+                @form.Html.NgInputFor(f => f.Name, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @form.Html.NgLabelFor(f => f.PortionSize)
+                @form.Html.NgInputFor(f => f.PortionSize, new { @class = "form-control"} )
+            </div>
+            <div class="form-group">
+                @form.Html.NgLabelFor(f => f.PortionUnits)
+                @form.Html.NgInputFor(f => f.PortionUnits, new { @class = "form-control"} )
+            </div>
+            <button type="submit" class="btn btn-default" @Html.NgClick(scope => scope.SubmitEdit())>Submit</button>
+        }
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/ng")
+}
